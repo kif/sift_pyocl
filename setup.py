@@ -41,17 +41,35 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 """
+import os
+import sys
+import glob
+import shutil
+import platform
+
+try:
+    # setuptools allows the creation of wheels
+    from setuptools import setup, Command
+    from setuptools.command.sdist import sdist
+    from setuptools.command.build_ext import build_ext
+    from setuptools.command.install_data import install_data
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py as _build_py
+except ImportError:
+    from distutils.core import setup, Command
+    from distutils.command.sdist import sdist
+    from distutils.command.build_ext import build_ext
+    from distutils.command.install_data import install_data
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py as _build_py
+from numpy.distutils.core import Extension as _Extension
 
 
-
-import os, sys, glob, shutil, platform
 if sys.version_info[0] == 2:
     import ConfigParser
 else:
     import configparser as ConfigParser
-from distutils.core import setup, Extension, Command
 from numpy.distutils.misc_util import get_numpy_include_dirs
-from distutils.command.install_data import install_data
 from distutils.sysconfig import get_python_lib
 
 # ###############################################################################
