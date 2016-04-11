@@ -278,7 +278,7 @@ if sphinx:
             sys.path.pop(0)
     cmdclass['build_doc'] = build_doc
 
-classifiers = """\
+classifiers = """
 Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 Programming Language :: Python
@@ -287,7 +287,6 @@ Operating System :: Microsoft :: Windows
 Operating System :: Unix
 Operating System :: MacOS :: MacOS X
 Operating System :: POSIX
-
 """
 
 
@@ -304,13 +303,10 @@ setup(name='sift_pyocl',
       test_suite="test",
       cmdclass=cmdclass,
       data_files=data_files,
-      classifiers=filter(None, classifiers.split("\n")),
+      classifiers=[ i for i in classifiers.split("\n") if i],
       license="MIT"
       )
 
-
-
-# print(data_files)
 try:
     import pyopencl
 except ImportError:
