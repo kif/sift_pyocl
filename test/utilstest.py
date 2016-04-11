@@ -43,7 +43,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 import os, imp, sys, subprocess, threading
 import distutils.util
 import logging
-import urllib2
+try:  # Python3
+    from urllib.request import urlopen, ProxyHandler, build_opener
+except ImportError:  # Python2
+    from urllib2 import urlopen, ProxyHandler, build_opener
+# import urllib2
 # import bz2
 # import gzip
 # import numpy
@@ -196,23 +200,18 @@ class UtilsTest(object):
             if "https_proxy" in os.environ:
                 dictProxies['https'] = os.environ["https_proxy"]
             if dictProxies:
-                proxy_handler = urllib2.ProxyHandler(dictProxies)
-                opener = urllib2.build_opener(proxy_handler).open
+                proxy_handler = ProxyHandler(dictProxies)
+                opener = build_opener(proxy_handler).open
             else:
-                opener = urllib2.urlopen
+                opener = urlopen
 
 #           Nota: since python2.6 there is a timeout in the urllib2
             timer = threading.Timer(cls.timeout + 1, cls.timeoutDuringDownload, args=[imagename])
             timer.start()
             logger.info("wget %s/%s" % (cls.url_base, imagename))
-            if sys.version > (2, 6):
-                data = opener("%s/%s" % (cls.url_base, imagename),
-                              data=None, timeout=cls.timeout).read()
-            else:
-                data = opener("%s/%s" % (cls.url_base, imagename),
-                              data=None).read()
-            timer.cancel()
-            logger.info("Image %s successfully downloaded." % baseimage)
+            data = opener("%s/%s" % (cls.url_base, imagename),
+                          data=None, timeout=cls.timeout).read()
+            logger.info("Image %s successfully downloaded." % imagename)
 
             try:
                 open(fullimagename, "wb").write(data)

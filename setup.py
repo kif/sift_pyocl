@@ -16,7 +16,7 @@ __authors__ = ["Jérôme Kieffer"]
 __contact__ = "jerome.kieffer@esrf.eu"
 __license__ = "MIT"
 __copyright__ = "European Synchrotron Radiation Facility, Grenoble, France"
-__date__ = "01/12/2014"
+__date__ = "11/04/2016"
 __status__ = "stable"
 __license__ = """
 Permission is hereby granted, free of charge, to any person
@@ -44,7 +44,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-import os, sys, glob, shutil, ConfigParser, platform
+import os, sys, glob, shutil, platform
+if sys.version_info[0] == 2:
+    import ConfigParser
+else:
+    import configparser as ConfigParser
 from distutils.core import setup, Extension, Command
 from numpy.distutils.misc_util import get_numpy_include_dirs
 from distutils.command.install_data import install_data
